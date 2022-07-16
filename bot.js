@@ -2,49 +2,29 @@
 require('dotenv').config();
 
 // Require the necessary discord.js classes
-const { Client, Intents, Collection } = require('discord.js');
-
-// file system and path
-const fs = require('node:fs');
-const path = require('node:path');
+const { Client, Intents } = require('discord.js');
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents:
+	[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+});
 
-// Adds command property to access other command files
-client.commands = new Collection();
+// Set the bot's "Playing: " status
+client.on('ready', () => {
+	client.user.setActivity('for monsters', { type: 'WATCHING' });
+});
 
-// Gets the command path and creates array of commands
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+// Gets the commands when bot is ready
+client.on('ready', () => {
+	let handler = require('./command-handler');
+	if (handler.default) handler = handler.default;
 
-// Sets all of the commands from the array of file names
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
-}
+	handler(client);
+});
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
 	console.log('Ready!');
-});
-
-// Executes command
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
-
-	const command = client.commands.get(interaction.commandName);
-
-	if (!command) return;
-
-	try {
-		await command.execute(interaction);
-	}
-	catch (error) {
-		console.lerror(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
 });
 
 // Login to Discord with your client's token
