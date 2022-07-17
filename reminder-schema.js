@@ -1,4 +1,3 @@
-const { Dayjs } = require('dayjs');
 const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema ({
@@ -7,11 +6,15 @@ const schema = new mongoose.Schema ({
 		required: false,
 	},
 	time: {
-		type: Dayjs,
+		type: Date,
 		required: true,
 	},
 	user: {
-		type: String,
+		type: Number,
+		required: true,
+	},
+	channel: {
+		type: Number,
 		required: true,
 	},
 });

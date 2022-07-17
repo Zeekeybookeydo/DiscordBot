@@ -15,6 +15,7 @@ const client = new Client({ intents:
 // Set the bot's "Playing: " status
 client.on('ready', () => {
 	client.user.setActivity('for monsters', { type: 'WATCHING' });
+	console.log('Set activity.');
 });
 
 // Gets the commands when bot is ready
@@ -23,6 +24,7 @@ client.on('ready', () => {
 	if (handler.default) handler = handler.default;
 
 	handler(client);
+	console.log('Loaded commands.');
 });
 
 // Connects to mongodb database
@@ -30,6 +32,7 @@ client.on('ready', async () => {
 	await mongoose.connect(process.env.MONGO_URI, {
 		keepAlive: true,
 	});
+	console.log('Database connected.');
 });
 
 // When the client is ready, run this code (only once)
