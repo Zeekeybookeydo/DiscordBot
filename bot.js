@@ -4,6 +4,9 @@ require('dotenv').config();
 // Require the necessary discord.js classes
 const { Client, Intents } = require('discord.js');
 
+// Add mongodb
+const mongoose = require('mongoose');
+
 // Create a new client instance
 const client = new Client({ intents:
 	[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
@@ -20,6 +23,13 @@ client.on('ready', () => {
 	if (handler.default) handler = handler.default;
 
 	handler(client);
+});
+
+// Connects to mongodb database
+client.on('ready', async () => {
+	await mongoose.connect(process.env.MONGO_URI, {
+		keepAlive: true,
+	});
 });
 
 // When the client is ready, run this code (only once)
