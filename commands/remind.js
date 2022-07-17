@@ -25,6 +25,7 @@ const timeUnits = {
 // Saves the reminder
 module.exports = {
 	description: 'Sets a reminder for a future date.',
+	help: '!remind <time> to <message>',
 	callback: (message, ...args) => {
 
 		// If no args then command will not work

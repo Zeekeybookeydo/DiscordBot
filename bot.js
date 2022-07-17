@@ -7,6 +7,20 @@ const { Client, Intents } = require('discord.js');
 // Add mongodb
 const mongoose = require('mongoose');
 
+// Cron setup
+const cron = require('cron').CronJob;
+
+// Start cron job
+new cron(
+	'* * * * *',
+	function() {
+		console.log('Message every minute');
+	},
+	null,
+	true,
+	'America/New_York',
+);
+
 // Create a new client instance
 const client = new Client({ intents:
 	[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
